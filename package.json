@@ -1,0 +1,23 @@
+{
+  "name": "editor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "demo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rbokenkamp/editor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rbokenkamp/editor/issues"
+  },
+  "homepage": "https://github.com/rbokenkamp/editor#readme",
+  "dependencies": {
+    "sass": "^1.32.6",
+    "ws": "^7.4.3"
+  }
+}
