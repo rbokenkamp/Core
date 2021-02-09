@@ -4,12 +4,11 @@ module.exports = class extends PreCore.classes.Workflow {
     PreCore.core = this
     this.initDisc(params.disc)
     this.paths = {}
-    this.index = 0
     this.source("", this)
     this.initClasses()
     delete this.paths
     Object.assign(params, this)
-    super.construct(this)
+    super.construct(params)
   }
 
   initDisc(disc) {
