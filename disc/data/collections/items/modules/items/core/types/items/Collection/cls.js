@@ -2,7 +2,7 @@ module.exports = class extends PreCore.classes.Branch {
 
   create(params) {
     super.create(params)
-    this.items = {}
+    this.items = this.items || {}
     const {items} = params
     for (const key in items) {
       this.setItem(key, items[key])
@@ -17,7 +17,10 @@ module.exports = class extends PreCore.classes.Branch {
     const itemKind = types[itemType].kind
     if (itemKind === "Branch") {
       if (key in items) {
-        throw new Error("@@@ TODO @@@", "release item")
+        const item = items[key]
+        if ("__branch" in item) {
+          throw new Error("@@@ TODO @@@", "release item")
+        }
       }
       data.parent = this
       data.key = key

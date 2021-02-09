@@ -8,6 +8,9 @@ const PreCore = module.exports = class {
       throw new Error()`Unknown type ${type}`
     }
     const branch = new cls()
+    if (PreCore.stage === "precore") {
+      Object.assign(branch, params)
+    }
     branch.build(params)
     return branch
   }
@@ -90,8 +93,31 @@ const PreCore = module.exports = class {
     return merge(...arg)
   }
 
+  static getErrors(obj) {
+    if (obj == undefined) {
+      return
+    }
+    const {items} = obj
+
+    if (items === undefined) {
+      return
+    }
+
+    for (const key in items) {
+      const item = items[key],
+          errors = item.errors
+      if (errors === undefined) {
+        continue
+      }
+      Object.assign(PreCore.errors, errors.items)
+    }
+  }
+
+
+
 }
 
+PreCore.stage = "precore"
 PreCore.classes = {}
 PreCore.types = {}
 PreCore.errors = {}

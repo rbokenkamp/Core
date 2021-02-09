@@ -5,14 +5,17 @@ const getClass = (key, module) => {
 }
 
 global.PreCore = getClass("PreCore")
-const {classes} = PreCore
+const {classes, instance} = PreCore
 classes.CoreError = getClass("CoreError")
 classes.Param = getClass("Param")
 classes.Container = getClass("Container")
 classes.Branch = getClass("Branch")
-classes.Service  = getClass("Service")
 classes.Disc  = getClass("Disc")
 classes.NodeDisc = getClass("NodeDisc", "node")
+classes.Service  = getClass("Service")
+classes.Disc  = getClass("Disc")
+classes.Workflow = getClass("Workflow")
+classes.Core = getClass("Core")
 
 
 process.on('uncaughtException', err => {
@@ -26,10 +29,13 @@ process.title = "core"
 
 try {
   const t0 = Date.now()
-  const core = classes.NodeDisc.build({
-    type: "NodeDisc",
+  const core = instance({
+    type: "Core",
     key: "core",
-    home,
+    disc: {
+      type: "NodeDisc",
+      home,
+    }
   })
 
   const release = () => {
@@ -41,7 +47,7 @@ try {
   process.on("SIGQUIT", release)
 
  // setInterval(() => undefined)
-release()
+  // release()
   console.log("elapsed", Date.now()-t0)
 
 

@@ -4,6 +4,10 @@ const ignore = {
 
 module.exports = class extends PreCore.classes.Container {
 
+  build(params) {
+    this.construct(params)
+    this.create(params)
+  }
 
   construct(params) {
     const {parent, key, type} = params,
@@ -47,13 +51,6 @@ module.exports = class extends PreCore.classes.Container {
       this[key] = value
     }
     instances[id] = this
-
-  }
-
-
-  build(params) {
-    this.construct(params)
-    this.create(params)
   }
 
   create(params) {
@@ -84,31 +81,6 @@ module.exports = class extends PreCore.classes.Container {
       this.branch(self)
     }
   }
-
-  createContainers(container, key) {
-    const {getType} = PreCore.classes.Type
-    for (const item in container) {
-      const branch = container[item]
-      if (getType(branch) !== "Object") {
-        continue
-      }
-
-      if (item in ignore) {
-        continue
-      }
-
-      const itemKey = key === undefined ? item : key + "/" + item
-
-      if ("type" in branch === false) {
-        this.createContainers(branch, itemKey)
-        continue
-      }
-
-      branch.key = itemKey
-      this.branch(branch)
-    }
-  }
-
 
   signalContainers(container, event, params) {
     const {getType} = PreCore
@@ -210,7 +182,7 @@ module.exports = class extends PreCore.classes.Container {
 
   release(params) {
     const {instances, instanceOf} = PreCore
-    console.log("RELEASE", this.path, this.type)
+ //   console.log("RELEASE", this.path, this.type)
     this.stage = "release"
     const {parent, key} = this
     if (parent) {
