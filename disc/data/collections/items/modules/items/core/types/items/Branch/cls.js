@@ -83,7 +83,7 @@ module.exports = class extends PreCore.classes.Container {
       throw new Error("@@@ TODO REMOVE @@@")
     }
     const {path} = this,
-        {classes, types} = PreCore,
+        {classes, types, core} = PreCore,
         typeObj = types[this.type],
         metas = typeObj.instance.items,
         meta = metas[key]
@@ -104,7 +104,8 @@ module.exports = class extends PreCore.classes.Container {
     }
     this[key] = value
     if (storable) {
-      console.log("@@@ SET @@@", this.path + "/" + key, value, storable)
+//      console.log("@@@ SET @@@", this.path + "/" + key, value, storable)
+      core.disc.write(this.path+"/"+key, value)
     }
     return value
   }
