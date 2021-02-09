@@ -8,10 +8,11 @@ module.exports = class extends PreCore.classes.Container {
         metas = typeObj.instance.items,
         path = params.path = parent ? parent.path + "/" + key : ""
 
+    console.log("CONSTRUCT", params.path, params.type)
     this.stage = "construct"
     for (const key in params) {
       if (key in metas === false) {
-        this.raise("tree_unknown_param", {path: path + "/" + key})
+        this.raise("branch_unknown_param", {path: path + "/" + key})
       }
     }
     for (const key in metas) {
@@ -19,6 +20,7 @@ module.exports = class extends PreCore.classes.Container {
       const {internal} = meta
       const metaType = meta.type
       const {kind} = types[metaType]
+      console.log("+++", key, internal, kind)
       if (internal) {
         continue
       }
@@ -30,9 +32,14 @@ module.exports = class extends PreCore.classes.Container {
       }
       const cls = classes[metaType]
       const value = params[key] = cls.validate(this, path + "/" + key, meta, params[key])
+      if (this[key] === value) {
+        continue
+      }
+      console.log("@@@", path+"/"+key, value)
       this[key] = value
     }
 
+    console.log("-".repeat(80))
   }
 
 
@@ -64,8 +71,10 @@ module.exports = class extends PreCore.classes.Container {
         this.raise("type_not_exists", {type: metaType, path: path + "/" + key})
       }
 
+      console.log(meta)
       const self = Object.assign({}, meta, params[key])
       self.key = key
+      console.log(self)
       this.branch(self)
     }
   }

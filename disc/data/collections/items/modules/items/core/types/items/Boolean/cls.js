@@ -1,4 +1,4 @@
-module.exports = class extends PreCore.classes.Branch {
+module.exports = class extends PreCore.classes.Param {
 
   static validate(instance, path, meta, data) {
     data = super.validate(instance, path, meta, data)

@@ -1,18 +1,13 @@
 module.exports = class extends PreCore.classes.Container {
 
   static validate(instance, path, meta, data) {
-    console.log("-".repeat(80))
+    console.log("+-".repeat(11), "META")
     const {classes, types} = PreCore,
-        {Branch, Tree} = classes
-    data = Branch.validate(instance, path, meta, data)
+        {Param, Container} = classes
+    data = Param.validate(instance, path, meta, data)
 
     if (data === undefined) {
       return
-    }
-
-
-    if (typeof data === "string") {
-      data = {type: data}
     }
 
     const {type} = data
@@ -21,7 +16,11 @@ module.exports = class extends PreCore.classes.Container {
       instance.raise("type_not_exists", {path, type})
     }
 
-    return Tree.validate(instance, path, types[type].metas, data)
+    const typeObj = types[type]
+
+    console.log("###", type, types[type].metas)
+
+    return Container.validate(instance, path, typeObj.metas.items, data)
   }
 
 
