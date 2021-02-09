@@ -1,15 +1,24 @@
+const ignore = {
+  parent: true,
+}
+
 module.exports = class extends PreCore.classes.Container {
 
 
   construct(params) {
     const {parent, key, type} = params,
-        {types, classes} = PreCore,
+        {types, classes, core, instances} = PreCore,
         typeObj = types[type],
         metas = typeObj.instance.items,
-        path = params.path ? params.path : (params.path = parent ? parent.path + "/" + key : "")
+        path = params.path ? params.path : (params.path = parent ? parent.path + "/" + key : ""),
+        id = params.id = core.index++
 
-  //  console.log("CONSTRUCT", params.path, params.type)
+    //  console.log("CONSTRUCT", params.path, params.type)
     this.stage = "construct"
+    Object.defineProperty(this, '__branch', {
+      value: 0,
+      enumerable: false,
+    })
     for (const key in params) {
       if (key in metas === false) {
         this.raise("branch_unknown_param", {path: path + "/" + key})
@@ -34,9 +43,10 @@ module.exports = class extends PreCore.classes.Container {
       if (this[key] === value) {
         continue
       }
-   //   console.log("@@@", path+"/"+key, value)
+      //   console.log("@@@", path+"/"+key, value)
       this[key] = value
     }
+    instances[id] = this
 
   }
 
@@ -51,7 +61,7 @@ module.exports = class extends PreCore.classes.Container {
         {types, classes} = PreCore,
         typeObj = types[type],
         metas = typeObj.instance.items
-  //  console.log("CREATE", this.path, this.type)
+    //  console.log("CREATE", this.path, this.type)
     this.stage = "create"
     for (const key in metas) {
       const meta = metas[key]
@@ -101,10 +111,11 @@ module.exports = class extends PreCore.classes.Container {
 
 
   signalContainers(container, event, params) {
-    const {getType} = PreCore.classes.Type
+    const {getType} = PreCore
 
     for (const key in container) {
       const branch = container[key]
+      const type = getType(branch)
       if (getType(branch) !== "Object") {
         continue
       }
@@ -129,8 +140,7 @@ module.exports = class extends PreCore.classes.Container {
       this[event](params)
     }
 
-
-    //   this.signalContainers(this, event, params)
+    this.signalContainers(this, event, params)
   }
 
   getError(name, params) {
@@ -199,17 +209,24 @@ module.exports = class extends PreCore.classes.Container {
   }
 
   release(params) {
+    const {instances, instanceOf} = PreCore
     console.log("RELEASE", this.path, this.type)
     this.stage = "release"
     const {parent, key} = this
     if (parent) {
-      delete this[key]
+      if (instanceOf(parent.type, "Collection") && this.path.match(/items\/[^\/]+$/)) {
+        delete parent.items[key]
+      }
+      else {
+        delete parent[key]
+      }
     }
+    delete instances[this.id]
 
   }
 
   static validate(instance, path, meta, data) {
-    const {types,classes} = PreCore
+    const {types, classes} = PreCore
 
     for (const key in data) {
       if (key in meta === false) {

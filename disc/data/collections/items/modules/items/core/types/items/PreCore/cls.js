@@ -40,7 +40,7 @@ const PreCore = module.exports = class {
       return "null"
     }
     let type = typeof (value)
-    return type === "object" ? value.constructor.name : type
+    return type === "object" ? value.constructor.name || "Object" : type
   }
 
   static merge(...arg) {
@@ -95,3 +95,4 @@ const PreCore = module.exports = class {
 PreCore.classes = {}
 PreCore.types = {}
 PreCore.errors = {}
+PreCore.instances = {}

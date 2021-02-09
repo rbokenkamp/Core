@@ -1,6 +1,10 @@
 module.exports = class extends PreCore.classes.Service{
 
 
+  construct(params) {
+    params.index = params.index || 0
+    super.construct(params)
+  }
   source(path, current) {
     const {paths} = this
 

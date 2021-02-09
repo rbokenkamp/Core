@@ -32,6 +32,16 @@ try {
     home,
   })
 
+  const release = () => {
+    core.signal("release")
+    const x = 1
+  }
+  process.on("SIGINT", release)
+  process.on("SIGHUB", release)
+  process.on("SIGQUIT", release)
+
+ // setInterval(() => undefined)
+release()
   console.log("elapsed", Date.now()-t0)
 
 
@@ -45,10 +55,4 @@ try {
 
 }
 //     const t0 = Date.now()
-/*
-const release = () => core.signal("release")
-process.on("SIGINT", release)
-process.on("SIGHUB", release)
-process.on("SIGQUIT", release)
-return core
-*/
+
