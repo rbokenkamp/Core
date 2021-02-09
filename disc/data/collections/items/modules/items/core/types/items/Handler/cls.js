@@ -1,3 +1,3 @@
-module.exports = class extends PreCore.classes.Param {
+module.exports = class extends PreCore.classes.Branch {
 
 }

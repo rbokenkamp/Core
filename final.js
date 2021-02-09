@@ -25,11 +25,14 @@ process.on('unhandledRejection', (reason, promise) => {
 process.title = "core"
 
 try {
+  const t0 = Date.now()
   const core = classes.NodeDisc.build({
     type: "NodeDisc",
     key: "core",
     home,
   })
+
+  console.log("elapsed", Date.now()-t0)
 
 
 } catch (err) {

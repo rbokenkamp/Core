@@ -78,7 +78,7 @@ module.exports = class extends PreCore.classes.Service{
     const {type} = params,
         {classes} = PreCore,
         cls = classes[type],
-        branch = new cls()
+        branch = PreCore.core = new cls()
 
     branch.paths = {}
     Object.assign(branch, params)

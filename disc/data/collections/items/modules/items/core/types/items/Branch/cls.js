@@ -6,9 +6,9 @@ module.exports = class extends PreCore.classes.Container {
         {types, classes} = PreCore,
         typeObj = types[type],
         metas = typeObj.instance.items,
-        path = params.path = parent ? parent.path + "/" + key : ""
+        path = params.path ? params.path : (params.path = parent ? parent.path + "/" + key : "")
 
-    console.log("CONSTRUCT", params.path, params.type)
+  //  console.log("CONSTRUCT", params.path, params.type)
     this.stage = "construct"
     for (const key in params) {
       if (key in metas === false) {
@@ -20,7 +20,6 @@ module.exports = class extends PreCore.classes.Container {
       const {internal} = meta
       const metaType = meta.type
       const {kind} = types[metaType]
-      console.log("+++", key, internal, kind)
       if (internal) {
         continue
       }
@@ -35,11 +34,10 @@ module.exports = class extends PreCore.classes.Container {
       if (this[key] === value) {
         continue
       }
-      console.log("@@@", path+"/"+key, value)
+   //   console.log("@@@", path+"/"+key, value)
       this[key] = value
     }
 
-    console.log("-".repeat(80))
   }
 
 
@@ -53,7 +51,7 @@ module.exports = class extends PreCore.classes.Container {
         {types, classes} = PreCore,
         typeObj = types[type],
         metas = typeObj.instance.items
-    console.log("CREATE", this.path, this.type)
+  //  console.log("CREATE", this.path, this.type)
     this.stage = "create"
     for (const key in metas) {
       const meta = metas[key]
@@ -71,10 +69,8 @@ module.exports = class extends PreCore.classes.Container {
         this.raise("type_not_exists", {type: metaType, path: path + "/" + key})
       }
 
-      console.log(meta)
       const self = Object.assign({}, meta, params[key])
       self.key = key
-      console.log(self)
       this.branch(self)
     }
   }
@@ -195,31 +191,11 @@ module.exports = class extends PreCore.classes.Container {
     return current[parts[last]] = value
   }
 
-  setBranch(key, value) {
-    const index = key.lastIndexOf("/")
-    if (index === -1) {
-      return this[key] = value
-    }
-
-    const container = this.traverse(key.substr(0, index))
-    return container[key.substr(index + 1)] = value
-  }
-
-  removeBranch(key) {
-    const index = key.lastIndexOf("/")
-    if (index === -1) {
-      return delete this[key]
-    }
-    const container = this.traverse(key.substr(0, index))
-    delete container[key.substr(index + 1)]
-  }
-
   branch(params) {
-    params.core = this.core || this
     params.parent = this
     const {key} = params
     const branch = PreCore.instance(params)
-    return this.setBranch(key, branch)
+    return this[key] = branch
   }
 
   release(params) {
@@ -227,9 +203,41 @@ module.exports = class extends PreCore.classes.Container {
     this.stage = "release"
     const {parent, key} = this
     if (parent) {
-      parent.removeBranch(key)
+      delete this[key]
     }
 
+  }
+
+  static validate(instance, path, meta, data) {
+    const {types,classes} = PreCore
+
+    for (const key in data) {
+      if (key in meta === false) {
+        instance.raise("branch_unknown_param", {path: path + "/" + key})
+      }
+    }
+
+    for (const key in meta) {
+      let itemMeta = meta[key]
+      if (typeof itemMeta === "string") {
+        itemMeta = {type: itemMeta}
+      }
+      const itemType = itemMeta.type
+      if (itemType in types === false) {
+        instance.raise("type_not_exists", {path: path + "/" + key, type: itemType})
+      }
+
+      if (itemMeta.internal === true) {
+        continue
+      }
+
+      const result = classes[itemType].validate(instance, path + "/" + key, itemMeta, data[key])
+      if (result !== undefined) {
+        data[key] = result
+      }
+    }
+
+    return data
   }
 
 

@@ -12,6 +12,29 @@ const PreCore = module.exports = class {
     return branch
   }
 
+  static instanceOf(typeA, typeB) {
+    const {types} = PreCore
+    if (typeA in types === false || typeB in types === false) {
+      return false
+    }
+
+    if (typeA === typeB) {
+      return true
+    }
+
+    let current = types[typeA]
+    while (true) {
+      const extend = current.extend
+      if (extend === undefined) {
+        return false
+      }
+      if (extend === typeB) {
+        return true
+      }
+      current = types[extend]
+    }
+  }
+
   static getType(value) {
     if (value === null) {
       return "null"

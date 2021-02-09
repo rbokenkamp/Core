@@ -1,9 +1,8 @@
 module.exports = class extends PreCore.classes.Container {
 
   static validate(instance, path, meta, data) {
-    console.log("+-".repeat(11), "META")
     const {classes, types} = PreCore,
-        {Param, Container} = classes
+        {Param, Branch} = classes
     data = Param.validate(instance, path, meta, data)
 
     if (data === undefined) {
@@ -18,9 +17,7 @@ module.exports = class extends PreCore.classes.Container {
 
     const typeObj = types[type]
 
-    console.log("###", type, types[type].metas)
-
-    return Container.validate(instance, path, typeObj.metas.items, data)
+    return Branch.validate(instance, path, typeObj.metas.items, data)
   }
 
 

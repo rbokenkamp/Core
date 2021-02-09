@@ -6,8 +6,8 @@ module.exports = class extends PreCore.classes.Param {
       return
     }
 
-    if (PreCore.getType(data) !== "Object") {
-      instance.raise("container_invalid_type", {path})
+    if (PreCore.getType(data) !== "Array") {
+      instance.raise("list_invalid_type", {path})
     }
     return data
   }
