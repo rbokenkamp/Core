@@ -1,1 +1,1 @@
-module.exports = "${path} expects Integer"
+module.exports = "${path} expects Integer (${data})"

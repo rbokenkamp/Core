@@ -16,4 +16,8 @@ const Rule = module.exports = class extends PreCore.classes.Param {
     return a.toString() === b.toString()
   }
 
+  static toSource(value) {
+    return value.toString()
+  }
+
 }

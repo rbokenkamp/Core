@@ -62,7 +62,13 @@ module.exports = class extends PreCore.classes.Workflow {
         const {extend} = typeObj
         if (extend === undefined || extend in paths === false) {
           if (extend) {
-            typeObj = merge(types[extend], typeObj)
+            const extendClone = merge({}, types[extend])
+            // id should not propagate on the Meta collections
+            extendClone.fixed && delete extendClone.fixed.id
+            extendClone.instance && delete extendClone.instance.id
+            extendClone.instance && delete extendClone.metas.id
+
+            typeObj = merge(extendClone, typeObj)
             this._set(keyPath, typeObj)
           }
           getErrors(typeObj.fixed)

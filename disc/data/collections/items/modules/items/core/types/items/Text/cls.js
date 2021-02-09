@@ -22,4 +22,8 @@ module.exports = class extends PreCore.classes.Param {
     return data
   }
 
+  static toSource(value) {
+    return JSON.stringify(value)
+  }
+
 }

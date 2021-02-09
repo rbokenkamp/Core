@@ -17,6 +17,9 @@ module.exports = class extends PreCore.classes.Container {
         metas = typeObj.instance.items,
         path = params.path ? params.path : (params.path = parent ? parent.path + "/" + key : "")
 
+    if (path === "/collections/items/modules/items/core/types/items/Branch/instance/id") {
+      debugger
+    }
     this.type = params.type
     this.path = path
 
@@ -28,8 +31,9 @@ module.exports = class extends PreCore.classes.Container {
       const id = params.id = core.index || 0
       core.setKey("index", id + 1)
     }
-    //  console.log("CONSTRUCT", params.path, params.type)
     this.stage = "construct"
+//    console.log("CONSTRUCT", params.path, params.type)
+
     Object.defineProperty(this, '__branch', {
       value: 0,
       enumerable: false,
@@ -104,8 +108,8 @@ module.exports = class extends PreCore.classes.Container {
     }
     this[key] = value
     if (storable) {
-//      console.log("@@@ SET @@@", this.path + "/" + key, value, storable)
-      core.disc.write(this.path+"/"+key, value)
+      console.log("@@@ SET @@@", this.path + "/" + key, value, storable)
+      core.disc.write(this.path + "/" + key + ".js", "module.exports = " + cls.toSource(value))
     }
     return value
   }
@@ -126,6 +130,7 @@ module.exports = class extends PreCore.classes.Container {
         {types, classes} = PreCore,
         typeObj = types[type],
         metas = typeObj.instance.items
+
     //  console.log("CREATE", this.path, this.type)
     this.stage = "create"
     for (const key in metas) {

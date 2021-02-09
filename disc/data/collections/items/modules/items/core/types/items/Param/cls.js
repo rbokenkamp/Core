@@ -10,6 +10,10 @@ module.exports = class {
     return data
   }
 
+  static toSource(value) {
+    return "" + value
+  }
+
   static equals(a, b) {
     return a === b
   }
