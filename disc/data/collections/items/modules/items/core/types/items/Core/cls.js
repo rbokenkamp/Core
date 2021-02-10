@@ -11,6 +11,10 @@ module.exports = class extends PreCore.classes.Workflow {
     super.construct(params)
   }
 
+  create(params) {
+    super.create(params)
+  }
+
   initDisc(disc) {
     const {type} = disc,
         cls = PreCore.classes[type],
@@ -38,6 +42,7 @@ module.exports = class extends PreCore.classes.Workflow {
       }
       if (ext == "js") {
         if (key === "cls") {
+          current[key] = disc.read(path + "/" + key + ".js").toString()
           paths[path.substr(path.lastIndexOf("/") + 1)] = path
           continue
         }
@@ -48,7 +53,7 @@ module.exports = class extends PreCore.classes.Workflow {
   }
 
   initClasses() {
-    const {paths, disc} = this,
+    const {paths, disc, channels} = this,
         {types, classes, merge, getErrors} = PreCore
 
     let processing = true
@@ -73,7 +78,10 @@ module.exports = class extends PreCore.classes.Workflow {
           }
           getErrors(typeObj.fixed)
           getErrors(typeObj.instance)
-          classes[key] = disc.require(path + "/cls")
+          const {channel} = typeObj
+          if (channel in channels === true) {
+            classes[key] = disc.require(path + "/cls")
+          }
           types[key] = typeObj
           delete paths[key]
           continue

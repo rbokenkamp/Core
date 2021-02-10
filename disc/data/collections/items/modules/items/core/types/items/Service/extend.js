@@ -1,1 +1,1 @@
-module.exports = "Branch"
+module.exports = "Collection"

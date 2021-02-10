@@ -10,6 +10,7 @@ classes.CoreError = getClass("CoreError")
 classes.Param = getClass("Param")
 classes.Container = getClass("Container")
 classes.Branch = getClass("Branch")
+classes.Collection = getClass("Collection")
 classes.Disc = getClass("Disc")
 classes.NodeDisc = getClass("NodeDisc", "node")
 classes.Service = getClass("Service")
@@ -32,26 +33,28 @@ try {
   const core = instance({
     type: "Core",
     key: "core",
+    channels: {
+      core: true,
+      node: true,
+    },
     disc: {
       type: "NodeDisc",
       home,
     },
-    branches: {
-      items: {
-        http: {
-          type: "NodeHttpServer",
-          home: __dirname + "/disc/data" + "/collections/items/modules/items/editor/resources",
-          mimes: {
-            html: "text/html",
-            js: "text/javascript",
-            png: "image/png",
-            jpg: "image/jpeg",
-          }
-        },
-        webSocket: {
-          type: "NodeWebSocketServer",
-          useHttp: true,
+    items: {
+      http: {
+        type: "NodeHttpServer",
+        home: __dirname + "/disc/data" + "/collections/items/modules/items/editor/resources",
+        mimes: {
+          html: "text/html",
+          js: "text/javascript",
+          png: "image/png",
+          jpg: "image/jpeg",
         }
+      },
+      webSocket: {
+        type: "NodeWebSocketServer",
+        useHttp: true,
       }
     }
   })

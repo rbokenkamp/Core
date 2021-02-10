@@ -5,6 +5,9 @@ module.exports = class extends PreCore.classes.Branch {
     this.items = this.items || {}
     PreCore.core.disc.write(this.path+"/items", null)
     const {items} = params
+    if (this.path === "") {
+      debugger
+    }
     for (const key in items) {
       this.setItem(key, items[key])
     }
@@ -14,7 +17,7 @@ module.exports = class extends PreCore.classes.Branch {
     const {getType, types, instanceOf, classes, instance} = PreCore
     const {items, path} = this
     const item = this.item || {type: "Param"}
-    const itemType = item.type
+    const itemType = item.type === "Meta" ? item.type : data.type || item.type
     const itemKind = types[itemType].kind
     if (itemKind === "Branch") {
       if (key in items) {

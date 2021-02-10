@@ -8,7 +8,7 @@ module.exports = class extends PreCore.classes.Service {
     const {port, useHttp} = this
 
     if (useHttp) {
-      const server = PreCore.core.get("branches/items/http/server")
+      const server = PreCore.core.get("items/http/server")
       this.server = new WebSocket.Server({server})
     } else {
       this.server = new WebSocket.Server({port})

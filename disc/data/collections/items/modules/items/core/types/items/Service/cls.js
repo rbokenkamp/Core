@@ -1,4 +1,4 @@
-module.exports = class extends PreCore.classes.Branch {
+module.exports = class extends PreCore.classes.Collection {
 
 
   start() {
