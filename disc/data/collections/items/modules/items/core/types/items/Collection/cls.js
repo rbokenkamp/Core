@@ -3,6 +3,7 @@ module.exports = class extends PreCore.classes.Branch {
   create(params) {
     super.create(params)
     this.items = this.items || {}
+    PreCore.core.disc.write(this.path+"/items", null)
     const {items} = params
     for (const key in items) {
       this.setItem(key, items[key])
@@ -26,8 +27,8 @@ module.exports = class extends PreCore.classes.Branch {
       data.key = key
       data.path = this.path + "/items/" + key
       const type = data.type = data.type || item.type
-      if (instanceOf(type, item.type) === false) {
-        this.raise("instance_invalid_type", {inheritType: data.type, type, path})
+      if (instanceOf( type, item.type ) === false) {
+        this.raise("instance_invalid_type", {baseType: item.type, type, path})
       }
 
       return items[key] = instance(data)

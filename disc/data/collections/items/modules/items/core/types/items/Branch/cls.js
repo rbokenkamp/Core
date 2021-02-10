@@ -17,22 +17,17 @@ module.exports = class extends PreCore.classes.Container {
         metas = typeObj.instance.items,
         path = params.path ? params.path : (params.path = parent ? parent.path + "/" + key : "")
 
-    if (path === "/collections/items/modules/items/core/types/items/Branch/instance/id") {
-      debugger
-    }
     this.type = params.type
     this.path = path
 
-    if (disc.exists(path) === false) {
-      disc.write(path, 0)
-    }
+    disc.write(path, null)
 
     if (params.id === undefined) {
       const id = params.id = core.index || 0
       core.setKey("index", id + 1)
     }
     this.stage = "construct"
-//    console.log("CONSTRUCT", params.path, params.type)
+  // console.log("CONSTRUCT", params.path, params.type)
 
     Object.defineProperty(this, '__branch', {
       value: 0,
@@ -131,7 +126,7 @@ module.exports = class extends PreCore.classes.Container {
         typeObj = types[type],
         metas = typeObj.instance.items
 
-    //  console.log("CREATE", this.path, this.type)
+  //  console.log("CREATE", this.path, this.type)
     this.stage = "create"
     for (const key in metas) {
       const meta = metas[key]

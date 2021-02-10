@@ -29,6 +29,9 @@ module.exports = class extends PreCore.classes.Disc {
     const full = this.home + path
     const index = path.lastIndexOf(".")
     if (index === -1) {
+      if (fs.existsSync(full)) {
+        return
+      }
       return fs.mkdirSync(full)
     }
     fs.writeFileSync(full, value)

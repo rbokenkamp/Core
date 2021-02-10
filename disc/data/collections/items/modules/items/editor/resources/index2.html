@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>core</title>
+  <style>
+
+    .Dashboard {
+      height: 100%;
+      background: #888;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      font-family: Inconsolata, Monaco, "Andale Mono", monospace;
+    }
+
+    .Header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: black;
+    }
+
+    img.Icon {
+      height: 50px;
+    }
+
+    .Company {
+
+    }
+
+    .Menu {
+      display: flex;
+      align-items: center;
+      font-size: 22px;
+    }
+
+    .Navigation {
+      background: #888;
+      display: flex;
+      align-items: center;
+    }
+
+    .Flag {
+      font-size: 33px;
+    }
+
+    span {
+      padding: 10px;
+    }
+
+    .Body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1 1 auto;
+    }
+  </style>
+</head>
+<body>
+<div class="Dashboard">
+  <div class="Header">
+    <div class="Company">
+      <span data-key="key">core</span>
+    </div>
+    <div class="Navigation">
+      <span class="Flag">🇳🇱</span>
+      <span class="Time">23:45</span>
+      <span><img class="Icon" src="hello.png" /></span>
+
+    </div>
+  <div class="Menu">
+    <span>✎</span>
+    <span>+</span>
+    <span>&times;</span>
+  </div>
+  </div>
+  <div class="Body"><span class="Language">hello</span></div>
+</div>
+<script>
+  const {protocol, host} = location,
+      url = `${protocol === "http:" ? "ws" : "wss"}://${host}`,
+  socket = new WebSocket(url)
+
+  socket.onopen = e => {
+    console.log("connected")
+//    socket.send()
+  }
+
+  socket.onmessage = e => {
+    const {data} = e
+    console.log("EVENT", data)
+  }
+
+  socket.onclose = e => {
+    console.log("close")
+  }
+
+  socket.onerror = err => {
+    alert(`[error] ${err.message}`);
+  }
+
+</script>
+</body>
+</html>

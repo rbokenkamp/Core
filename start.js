@@ -1,73 +1,76 @@
-const home = __dirname + "/disc"
-const NodeDisc = require(__dirname + "/lib/NodeDisc")
+const home = __dirname + "/disc/data"
+const getClass = (key, module) => {
+  module = module || "core"
+  return require(home + `/collections/items/modules/items/${module}/types/items/${key}/cls`)
+}
 
-const disc = new NodeDisc()
-const {stringify} = JSON
-Object.assign(disc, {
-  key: "disc",
-  type: "NodeDisc",
-  home,
-  extensions: {
-    js: false,
-    html: false,
-    scss: false,
-    css: false,
-    jpg: true,
-    png: true,
-  },
-  sassPaths: [home + "/data/collections/modules/items/editor/sass"]
+global.PreCore = getClass("PreCore")
+const {classes, instance} = PreCore
+classes.CoreError = getClass("CoreError")
+classes.Param = getClass("Param")
+classes.Container = getClass("Container")
+classes.Branch = getClass("Branch")
+classes.Disc = getClass("Disc")
+classes.NodeDisc = getClass("NodeDisc", "node")
+classes.Service = getClass("Service")
+classes.Disc = getClass("Disc")
+classes.Workflow = getClass("Workflow")
+classes.Core = getClass("Core")
+
+
+process.on('uncaughtException', err => {
+  console.log('UNCAUGHT:', err)
+})
+process.on('unhandledRejection', (reason, promise) => {
+  console.log('Unhandled Rejection at:', promise, 'reason:', reason)
 })
 
-disc.initialize()
+process.title = "core"
 
-const getType = (value) => {
-  if (value === null) {
-    return "null"
-  }
-  let type = typeof (value)
-  return type === "object" ? value.constructor.name || "Object": type
-}
-
-const toSource = (value) => {
-  if (value === null) {
-    return "null"
-  }
-  if (value === undefined) {
-    return "undefined"
-  }
-  const result = ""
-  const type = getType(value)
-  if (type === "Array") {
-    let result = "["
-    for (const v of value) {
-      result += (result === "[" ? "" : ",") + toSource(v)
+try {
+  const t0 = Date.now()
+  const core = instance({
+    type: "Core",
+    key: "core",
+    disc: {
+      type: "NodeDisc",
+      home,
+    },
+    branches: {
+      items: {
+        http: {
+          type: "NodeHttpServer",
+          home: __dirname + "/disc/data" + "/collections/items/modules/items/editor/resources",
+          mimes: {
+            html: "text/html",
+            js: "text/javascript",
+            png: "image/png",
+            jpg: "image/jpeg",
+          }
+        },
+        webSocket: {
+          type: "NodeWebSocketServer",
+          useHttp: true,
+        }
+      }
     }
-    return result + "]"
-  }
-  if (type === "Date") {
-    return "new Date(" + value.getTime() + ")"
-  }
-  if (type === "RegExp" || type === "function") {
-    return value.toString()
-  }
-  if (type === "Buffer") {
-    return `Buffer.from("${value.toString("base64")}", "base64")`
-  }
+  })
 
-  if (type === "string") {
-    return stringify(value)
-  }
-  if (type === "Object" || typeof value === "object") {
-    let result = "{"
-    for (const name in value) {
-      result += (result === "{" ? "" : ",") + stringify(name) + ":" + toSource(value[name])
-    }
-    result += "}"
-    return result
-  }
+  const release = () => core.signal("release")
+  process.on("SIGINT", release)
+  process.on("SIGHUB", release)
+  process.on("SIGQUIT", release)
+  console.log("elapsed", Date.now() - t0)
+  core.signal("start")
 
-  return "" + value
+} catch (err) {
+  const {CoreError} = PreCore.classes
+  if (err instanceof CoreError === false) {
+    err = new CoreError(err)
+  }
+  const {message, code, params, path, line, column, trace} = err
+  console.log("@@@ error @@@", {message, code, params, path, line, column, trace})
+
 }
+//     const t0 = Date.now()
 
-const fs = require("fs")
-fs.writeFileSync("./output.js", "module.exports=" + toSource(disc))
