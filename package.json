@@ -1,21 +1,21 @@
 {
-  "name": "editor",
-  "version": "1.0.0",
-  "description": "",
-  "main": "demo.js",
+  "name": "core",
+  "version": "0.0.0",
+  "description": "Micro Services Engine for Node.js, AWS & User Interface",
+  "main": "start.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rbokenkamp/editor.git"
+    "url": "git+https://github.com/rbokenkamp/core.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/rbokenkamp/editor/issues"
+    "url": "https://github.com/rbokenkamp/core/issues"
   },
-  "homepage": "https://github.com/rbokenkamp/editor#readme",
+  "homepage": "https://github.com/rbokenkamp/core#readme",
   "dependencies": {
     "sass": "^1.32.6",
     "ws": "^7.4.3"

@@ -44,7 +44,7 @@ try {
     items: {
       http: {
         type: "NodeHttpServer",
-        home: __dirname + "/disc/data" + "/collections/items/modules/items/editor/resources",
+        home: __dirname + "/disc/data",  //+ "/collections/items/modules/items/editor/resources",
         mimes: {
           html: "text/html",
           js: "text/javascript",

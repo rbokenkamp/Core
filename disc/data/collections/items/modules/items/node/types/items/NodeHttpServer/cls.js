@@ -10,7 +10,7 @@ module.exports = class extends PreCore.classes.Service {
 
     const requestHandler = (request, response) => {
       const {url} = request
-      const path = url === "/" || url.indexOf(".") === -1 ? "/index.html" : url
+      const path = url === "/" || url.indexOf(".") === -1 ? "/landing.html" : url
       const index = path.lastIndexOf(".")
       const ext = path.substr(index + 1)
       const mime = mimes[ext]
