@@ -1,6 +1,13 @@
 module.exports = class extends PreCore.classes.Workflow {
 
   construct(params) {
+    try {
+      if (window !== undefined) {
+        this.isBrowser = true
+      }
+    } catch (err) {
+    }
+
     PreCore.core = this
     this.initDisc(params.disc)
     this.paths = {}
@@ -30,7 +37,8 @@ module.exports = class extends PreCore.classes.Workflow {
   }
 
   source(path, current) {
-    const {paths, disc} = this
+    const {paths, disc, isBrowser} = this,
+        {sources} = PreCore
 
     const items = disc.read(path)
     for (const item of items) {
@@ -42,8 +50,11 @@ module.exports = class extends PreCore.classes.Workflow {
       }
       if (ext == "js") {
         if (key === "cls") {
-          current[key] = disc.read(path + "/" + key + ".js").toString()
-          paths[path.substr(path.lastIndexOf("/") + 1)] = path
+          const name = path.substr(path.lastIndexOf("/") + 1)
+          if (!isBrowser) {
+            sources[name] = disc.read(path + "/" + key + ".js").toString()
+          }
+          paths[name] = path
           continue
         }
         current[key] = disc.require(itemPath)
@@ -53,7 +64,7 @@ module.exports = class extends PreCore.classes.Workflow {
   }
 
   initClasses() {
-    const {paths, disc, channels} = this,
+    const {paths, channels, disc} = this,
         {types, classes, merge, getErrors} = PreCore
 
     let processing = true
@@ -71,7 +82,7 @@ module.exports = class extends PreCore.classes.Workflow {
             // id should not propagate on the Meta collections
             extendClone.fixed && delete extendClone.fixed.id
             extendClone.instance && delete extendClone.instance.id
-            extendClone.instance && delete extendClone.metas.id
+            extendClone.metas && delete extendClone.metas.id
 
             typeObj = merge(extendClone, typeObj)
             this._set(keyPath, typeObj)
@@ -79,7 +90,7 @@ module.exports = class extends PreCore.classes.Workflow {
           getErrors(typeObj.fixed)
           getErrors(typeObj.instance)
           const {channel} = typeObj
-          if (channel in channels === true) {
+          if (channel in channels === true && classes[key] === undefined) {
             classes[key] = disc.require(path + "/cls")
           }
           types[key] = typeObj

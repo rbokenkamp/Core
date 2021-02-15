@@ -119,6 +119,7 @@ const PreCore = module.exports = class {
 
 PreCore.stage = "precore"
 PreCore.classes = {}
+PreCore.sources = {}
 PreCore.types = {}
 PreCore.errors = {}
 PreCore.instances = {}

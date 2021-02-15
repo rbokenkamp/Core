@@ -103,7 +103,7 @@ module.exports = class extends PreCore.classes.Container {
     }
     this[key] = value
     if (storable) {
-      console.log("@@@ SET @@@", this.path + "/" + key, value, storable)
+    //  console.log("@@@ SET @@@", this.path + "/" + key, value, storable)
       core.disc.write(this.path + "/" + key + ".js", "module.exports = " + cls.toSource(value))
     }
     return value

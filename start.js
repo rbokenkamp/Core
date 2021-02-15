@@ -55,7 +55,7 @@ try {
       webSocket: {
         type: "NodeWebSocketServer",
         useHttp: true,
-      }
+      },
     }
   })
 
