@@ -123,3 +123,5 @@ PreCore.sources = {}
 PreCore.types = {}
 PreCore.errors = {}
 PreCore.instances = {}
+PreCore.templates = {}
+PreCore.styles = {}

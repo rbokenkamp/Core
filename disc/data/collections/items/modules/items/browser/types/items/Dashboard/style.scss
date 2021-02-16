@@ -1,2 +1,52 @@
 @import "colors";
 
+.Dashboard {
+  height: 100%;
+  background: #888;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-family: Inconsolata, Monaco, "Andale Mono", monospace;
+}
+
+.Header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: black;
+}
+
+img.Icon {
+  height: 50px;
+}
+
+.Company {
+
+}
+
+.Menu {
+  display: flex;
+  align-items: center;
+  font-size: 22px;
+}
+
+.Navigation {
+  background: #888;
+  display: flex;
+  align-items: center;
+}
+
+.Flag {
+  font-size: 33px;
+}
+
+span {
+  padding: 10px;
+}
+
+.Body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+}

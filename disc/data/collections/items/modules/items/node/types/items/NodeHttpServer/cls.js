@@ -56,9 +56,11 @@ module.exports = class extends PreCore.classes.Service {
   getCoreContent() {
     const {types, sources} = PreCore
     let result = `const module = {}
-    console.log('hello')
 `
     result += sources.PreCore
+    result += `PreCore.templates = ${JSON.stringify(PreCore.templates)}
+PreCore.styles = ${JSON.stringify(PreCore.styles)}
+`
 
     const channels = {
       core: true,
@@ -80,25 +82,35 @@ module.exports = class extends PreCore.classes.Service {
     result += `
   //  localStorage.clear()
 PreCore.classes.BrowserDisc.initialize("", ${JSON.stringify(obj)})
-PreCore.instance({
-      type: "Core",
-      key: "core",
-      channels: {
-        core: true,
-        browser: true,
-      },
-      disc: {
-        type: "BrowserDisc",
-        home: "/local",
-      },
-      items: {
-        webSocket: {
-          type: "BrowserWebSocketClient",
+setTimeout(() => {
+  PreCore.instance({
+        type: "Core",
+        key: "core",
+        channels: {
+          core: true,
+          browser: true,
+        },
+        disc: {
+          type: "BrowserDisc",
+          home: "/local",
+        },
+        items: {
+          app: {
+            type: "App",
+            items: {
+              dashboard: {
+                type: "Dashboard",
+              }
+            }
+          },
+          webSocket: {
+            type: "BrowserWebSocketClient",
+          }
         }
-      }
+  })
+  console.log(PreCore.core)
+  PreCore.core.signal("start")
 })
-console.log(PreCore.core)
-PreCore.core.signal("start")
 `
 
     return result

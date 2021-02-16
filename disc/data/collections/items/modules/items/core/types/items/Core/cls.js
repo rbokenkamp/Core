@@ -48,6 +48,7 @@ module.exports = class extends PreCore.classes.Workflow {
         current[key] = this.source(itemPath, current[key] || {})
         continue
       }
+      const name = path.substr(path.lastIndexOf("/") + 1)
       if (ext == "js") {
         if (key === "cls") {
           const name = path.substr(path.lastIndexOf("/") + 1)
@@ -60,12 +61,16 @@ module.exports = class extends PreCore.classes.Workflow {
         current[key] = disc.require(itemPath)
         continue
       }
-      if (item === "template.html" || item === "style.css") {
-        current[key] = disc.read(itemPath+".html").toString("utf8")
+      if (item === "template.html") {
+        PreCore.templates[name] = disc.read(itemPath+".html").toString("utf8")
+        continue
+      }
+      if (item === "style.css") {
+        PreCore.styles[name] = disc.read(itemPath+".html").toString("utf8")
         continue
       }
       if (item === "style.scss" && disc.scss) {
-        current[key] = disc.scss(disc.read(itemPath+".scss").toString("utf8"))
+        PreCore.styles[name] = disc.scss(disc.read(itemPath+".scss").toString("utf8"))
       }
 
     }
