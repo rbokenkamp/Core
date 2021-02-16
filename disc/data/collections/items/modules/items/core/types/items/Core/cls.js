@@ -58,7 +58,16 @@ module.exports = class extends PreCore.classes.Workflow {
           continue
         }
         current[key] = disc.require(itemPath)
+        continue
       }
+      if (item === "template.html" || item === "style.css") {
+        current[key] = disc.read(itemPath+".html").toString("utf8")
+        continue
+      }
+      if (item === "style.scss" && disc.scss) {
+        current[key] = disc.scss(disc.read(itemPath+".scss").toString("utf8"))
+      }
+
     }
     return current
   }

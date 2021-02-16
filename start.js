@@ -40,6 +40,7 @@ try {
     disc: {
       type: "NodeDisc",
       home,
+      sassPaths: [__dirname+"/disc/data/collections/items/modules/items/editor/sass"]
     },
     items: {
       http: {
